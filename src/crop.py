@@ -2,7 +2,7 @@ import torch
 
 from typing import Tuple
 from ._types import AUDIO
-
+import math
 
 class AudioCrop:
     @classmethod
@@ -46,17 +46,17 @@ class AudioCrop:
         if ":" not in end_time:
             end_time = f"00:{end_time}"
 
-        start_seconds_time = 60 * int(start_time.split(":")[0]) + int(
+        start_seconds_time = 60 * float(start_time.split(":")[0]) + float(
             start_time.split(":")[1]
         )
-        start_frame = start_seconds_time * sample_rate
+        start_frame = math.ceil(start_seconds_time * sample_rate)
         if start_frame >= waveform.shape[-1]:
             start_frame = waveform.shape[-1] - 1
 
-        end_seconds_time = 60 * int(end_time.split(":")[0]) + int(
+        end_seconds_time = 60 * float(end_time.split(":")[0]) + float(
             end_time.split(":")[1]
         )
-        end_frame = end_seconds_time * sample_rate
+        end_frame = math.ceil(end_seconds_time * sample_rate)
         if end_frame >= waveform.shape[-1]:
             end_frame = waveform.shape[-1] - 1
         if start_frame < 0:
